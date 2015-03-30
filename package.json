@@ -4,11 +4,15 @@
   "description": "A node js client to call the push-woosh API",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "node tests"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "request": "^2.54.0"
+  },
+  "devDependencies": {
+    "fraudster": "^1.0.0",
+    "tape": "^3.5.0"
   }
 }
