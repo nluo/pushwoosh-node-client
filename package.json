@@ -1,0 +1,11 @@
+{
+  "name": "push-woosh-nodejs-client",
+  "version": "1.0.0",
+  "description": "A node js client to call the push-woosh API",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "",
+  "license": "ISC"
+}
