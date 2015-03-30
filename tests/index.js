@@ -2,11 +2,13 @@ var test = require('tape'),
     Fraudster = require('fraudster'),
     fraudster = new Fraudster(),
     pathToObjectUnderTest = '../index.js',
-    errors = require('../lib/errors');
-
+    errors = require('../lib/errors'),
+    testAppCode = 'testAppCode',
+    testAuthToken = 'testAuthToken',
+    testHost = 'http://localhost',
+    testApiVersion = '123';
 
 fraudster.registerAllowables([pathToObjectUnderTest, 'util']);
-
 
 function resetMocks() {
     fraudster.registerMock('request', {});
@@ -31,6 +33,33 @@ test('Pushwoosh client exists', function(t){
     t.ok(client, 'Pushwoosh client does exist');
     t.equal(typeof client, 'function', 'Pushwoosh is a function as expected');
 });
+
+test('Pushwoosh constructor success case', function(t){
+    t.plan(4);
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken, {host: testHost, apiVersion: testApiVersion});
+
+    t.equal(client.appCode, testAppCode, 'Application code passed correctly');
+    t.equal(client.authToken, testAuthToken, 'Auth token passed correctly');
+    t.equal(client.apiVersion, testApiVersion, 'API version correct');
+    t.equal(client.host, testHost, 'API host correct');
+
+});
+
+test('Pushwoosh constructor success case with options', function(t){
+    t.plan(4);
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    t.equal(client.appCode, testAppCode, 'Application code passed correctly');
+    t.equal(client.authToken, testAuthToken, 'Auth token passed correctly');
+    t.ok(client.apiVersion, 'API version exists');
+    t.ok(client.host, 'API host exists');
+
+});
+
 
 test('Pushwoosh constructor test error case 1: no appCode and authToken', function(t){
     t.plan(2);
