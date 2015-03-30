@@ -1,4 +1,6 @@
 var request = require('request'),
+    extend = require('util')._extend,
+    errors = require('./lib/errors'),
     host = 'https://cp.pushwoosh.com/json',
     apiVersion = '1.3';
 
@@ -18,68 +20,97 @@ function PushwooshClient(appCode, authToken, options) {
 
 };
 
+PushwooshClient.prototype.sendMessage = function (msg, device, options, callback) {
 
-PushwooshClient.prototype.sendMessage = function (msg, options, callback) {
-
+    var client = this;
     if (!msg || typeof msg !== 'string') {
-        throw new Error('Message has to be provided');
+        return callback(new Error('Message has to be provided'));
     }
 
     if (!callback) {
         callback = options;
-        options = {};
+        options = typeof device === 'object' ? device : {};
     }
 
     if (typeof callback !== 'function') {
-        throw new Error('A callback function must be provided');
+        return callback(new Error('A callback function must be provided'));
     }
+
+    var defaultOptions = {
+        send_date: 'now',
+        ignore_user_timezone: true,
+        content: msg,
+        devices: [device]
+    };
+
+    var notification = extend(defaultOptions, options);
 
     var body = {
         request: {
             application: this.appCode,
             auth: this.authToken,
-            notifications: [{
-                send_date: options.sendDate || 'now',
-                ignore_user_timezone: true,
-                content: msg,
-                devices: options.devices
-            }]
+            notifications: [notification]
         }
     };
 
-    request({
-        method: 'POST',
-        uri: this.host + '/' + this.apiVersion +'/' +'createMessage',
-        json: true,
-        body: body
-    }, function(error, response, body){
+    client.sendRequest('createMessage', body, function (error, response, body) {
         if (error) {
             return callback(error);
         }
-
-        if (response.statusCode == 200 && body.status_code == 200) {
-            callback(null, body.response);
-        }
-
-        if (response.statusCode == 200 && body.status_code == 210) {
-            callback(body.status_message);
-        }
-
-        if (response.statusCode == 500) {
-            callback ('Internal Error');
-        }
-
-        if (response.statusCode == 400) {
-            callback('Malformed request string');
-        }
+        client.parseResponse(response, body, callback);
     });
 };
 
 PushwooshClient.prototype.deleteMessage = function (msgCode, callback) {
+
+    var client = this;
     if (!msgCode) {
-        return callback('Message code must be provided');
+        return callback(new Error('Message code must be provided'));
     }
 
+    var body = {
+        request: {
+            auth: this.authToken,
+            message: msgCode
+        }
+    };
+
+    client.sendRequest('deleteMessage', body, function(error, response, body){
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    })
 };
+
+
+PushwooshClient.prototype.sendRequest = function (method, data, callback) {
+    request({
+        method: 'POST',
+        uri: this.host + '/' + this.apiVersion + '/' + method,
+        json: true,
+        body: data
+    }, callback);
+};
+
+PushwooshClient.prototype.parseResponse = function(response, body, callback) {
+    if (response.statusCode == 200 && body.status_code == 200) {
+        return callback(null, body.response);
+    }
+
+    if (response.statusCode == 200 && body.status_code == 210) {
+        return callback(null, {description: 'Argument error', detail: body.status_message, code: 210});
+    }
+
+    if (response.statusCode == 500) {
+        return callback(new errors.Internal());
+    }
+
+    if (response.statusCode == 400) {
+        return callback(new errors.Malformed());
+    }
+
+    callback(new Error('Unknown response code / error'));
+}
 
 module.exports = PushwooshClient;
