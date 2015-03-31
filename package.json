@@ -1,7 +1,7 @@
 {
-  "name": "push-woosh-nodejs-client",
+  "name": "pushwoosh-node-client",
   "version": "1.0.0",
-  "description": "A node js client to call the push-woosh API",
+  "description": "A nodejs client to consume the Pushwoosh API",
   "main": "index.js",
   "scripts": {
     "test": "node tests"
