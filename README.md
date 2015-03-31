@@ -3,9 +3,11 @@ A node js client to consume the Push Woosh API
 
 ## Installation
 
+    npm i pushwoosh-client --save
+    
 ## Usage
 ```javascript
-  var Pushwoosh = require('pushwoosh-node-client');
+  var Pushwoosh = require('pushwoosh-client');
   var client= new Pushwoosh("AppCode", "AuthToken");
 
 };
@@ -21,4 +23,6 @@ client.sendMessage('Hello world', 'device token', function(error, response) {
 ```
 ## Tests
 
-  Coming soon
+    npm test
+
+Currently tests are all passed and with 100% coverage
