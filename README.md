@@ -7,7 +7,7 @@ A node js client to consume the Push Woosh API
     
 ## Usage
 
-### Send messages to all devices
+Send messages to all devices
 ```javascript
   var Pushwoosh = require('pushwoosh-client');
   var client= new Pushwoosh("AppCode", "AuthToken");
