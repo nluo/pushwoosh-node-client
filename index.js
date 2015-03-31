@@ -47,8 +47,12 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     var devices = [];
 
-    if (device) {
+    if (device && typeof device =='string') {
         devices.push(device);
+    }
+
+    if (device && device instanceof Array) {
+        devices = device;
     }
 
     var defaultOptions = {
@@ -62,8 +66,8 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     var body = {
         request: {
-            application: this.appCode,
-            auth: this.authToken,
+            application: client.appCode,
+            auth: client.authToken,
             notifications: [notification]
         }
     };
@@ -86,7 +90,7 @@ PushwooshClient.prototype.deleteMessage = function (msgCode, callback) {
 
     var body = {
         request: {
-            auth: this.authToken,
+            auth: client.authToken,
             message: msgCode
         }
     };
