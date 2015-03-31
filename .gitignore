@@ -27,5 +27,7 @@ build/Release
 node_modules
 
 # From IDE
-client
 .idea
+
+# Coverage folder
+coverage
