@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node tests"
   },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
   "keywords": [
     "PushWoosh",
     "Push Woosh",
