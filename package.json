@@ -6,8 +6,18 @@
   "scripts": {
     "test": "node tests"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "PushWoosh",
+    "Push Woosh",
+    "Push",
+    "notifications"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nluo/pushwoosh-node-client.git"
+  },
+  "author": "Nick Luo (https://github.com/nluo)",
+  "license": "MIT",
   "dependencies": {
     "request": "^2.54.0"
   },
