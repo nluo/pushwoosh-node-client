@@ -21,4 +21,6 @@ client.sendMessage('Hello world', 'device token', function(error, response) {
 ```
 ## Tests
 
-  Coming soon
+    npm test
+
+Currently tests are all passed and with 100% coverage
