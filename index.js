@@ -27,20 +27,35 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
         return callback(new Error('Message has to be provided'));
     }
 
-    if (!callback) {
-        callback = options;
-        options = typeof device === 'object' ? device : {};
+    if (!options) {
+        callback = device;
+        options = {};
+        device = null;
     }
 
-    if (typeof callback !== 'function') {
-        return callback(new Error('A callback function must be provided'));
+    if (!callback) {
+        callback = options;
+        if (typeof device === 'object') {
+            options = device;
+            device = null;
+        }
+
+        if (typeof device === 'string') {
+            options = {};
+        }
+    }
+
+    var devices = [];
+
+    if (device) {
+        devices.push(device);
     }
 
     var defaultOptions = {
         send_date: 'now',
         ignore_user_timezone: true,
         content: msg,
-        devices: [device]
+        devices: devices
     };
 
     var notification = extend(defaultOptions, options);
@@ -64,7 +79,8 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 PushwooshClient.prototype.deleteMessage = function (msgCode, callback) {
 
     var client = this;
-    if (!msgCode) {
+
+    if (typeof msgCode !== 'string') {
         return callback(new Error('Message code must be provided'));
     }
 
@@ -111,6 +127,6 @@ PushwooshClient.prototype.parseResponse = function(response, body, callback) {
     }
 
     callback(new Error('Unknown response code / error'));
-}
+};
 
 module.exports = PushwooshClient;
