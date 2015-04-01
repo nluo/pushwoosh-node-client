@@ -47,7 +47,7 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     var devices = [];
 
-    if (device && typeof device =='string') {
+    if (device && typeof device === 'string') {
         devices.push(device);
     }
 
@@ -114,19 +114,19 @@ PushwooshClient.prototype.sendRequest = function (method, data, callback) {
 };
 
 PushwooshClient.prototype.parseResponse = function(response, body, callback) {
-    if (response.statusCode == 200 && body.status_code == 200) {
+    if (response.statusCode === 200 && body.status_code === 200) {
         return callback(null, body.response);
     }
 
-    if (response.statusCode == 200 && body.status_code == 210) {
+    if (response.statusCode === 200 && body.status_code === 210) {
         return callback(null, {description: 'Argument error', detail: body.status_message, code: 210});
     }
 
-    if (response.statusCode == 500) {
+    if (response.statusCode === 500) {
         return callback(new errors.Internal());
     }
 
-    if (response.statusCode == 400) {
+    if (response.statusCode === 400) {
         return callback(new errors.Malformed());
     }
 
