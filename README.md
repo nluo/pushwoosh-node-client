@@ -1,5 +1,5 @@
-# pushwoosh-node-client
-A node js client to consume the Push Woosh API
+# pushwoosh-node-client [![Build Status](https://travis-ci.org/nluo/pushwoosh-node-client.svg?branch=master)](https://travis-ci.org/nluo/pushwoosh-node-client)
+A node js client to consume the Pushwoosh API to send push notifications to mobile devices
 
 ## Installation
 

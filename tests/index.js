@@ -15,7 +15,7 @@ fraudster.registerAllowables([pathToObjectUnderTest, 'util']);
 
 function resetMocks() {
     fraudster.registerMock('request', {});
-    fraudster.registerMock('./lib/errors', errors);
+    fraudster.registerMock('../lib/errors', errors);
 }
 
 
