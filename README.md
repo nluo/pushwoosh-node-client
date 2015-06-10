@@ -20,7 +20,6 @@ client.sendMessage('Hello world', function(error, response) {
      }
 
      console.log('Pushwoosh API response is', response);
-}
 });
 ```
 
@@ -30,12 +29,10 @@ To send messages to a specificed device or devices, you can pass a device token 
 // Push to a device
 client.sendMessage('Hello world', 'device token', function(error, response) {
      ...
-}
 });
 // Push to multiple devices
 client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(error, response) {
      ...
-}
 });
 ```
 
