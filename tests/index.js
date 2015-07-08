@@ -63,6 +63,18 @@ test('Pushwoosh constructor success case with options', function (t) {
 
 });
 
+test('Pushwoosh constructor success case for applications_group', function (t) {
+    t.plan(3);
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken, {useApplicationsGroup: true});
+
+    t.equal(client.appCode, testAppCode, 'Application code passed correctly');
+    t.equal(client.authToken, testAuthToken, 'Auth token passed correctly');
+    t.equal(client.useApplicationsGroup, true, 'useApplicationsGroup correct');
+
+});
+
 
 test('Pushwoosh constructor test error case 1: no appCode and authToken', function (t) {
     t.plan(2);
@@ -123,6 +135,47 @@ test('Pushwoosh send message success case with only 2 params msg and callback', 
 
     var PwClient = getCleanTestObject(),
         client = new PwClient(testAppCode, testAuthToken);
+
+
+    client.sendMessage(testMsg, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, {}, 'response is the same');
+    });
+
+});
+
+test('Pushwoosh send message success case for useApplicationsGroup:true with only 2 params msg and callback', function (t) {
+    t.plan(5);
+
+    var mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {}
+        },
+        expectedBody = {
+            request: {
+                applications_group: testAppCode,
+                auth: testAuthToken,
+                notifications: [{
+                    send_date: 'now',
+                    ignore_user_timezone: true,
+                    content: testMsg,
+                    devices: []
+                }]
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken, {useApplicationsGroup: true});
 
 
     client.sendMessage(testMsg, function (err, response) {
@@ -218,6 +271,48 @@ test('Pushwoosh send message success case with 3 params: msg, options, callback'
 
 });
 
+test('Pushwoosh send message success case for useApplicationsGroup:true with 3 params: msg, options, callback', function (t) {
+    t.plan(5);
+
+    var mockDevice = 'someToken',
+        mockOptions = {},
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {}
+        },
+        expectedBody = {
+            request: {
+                applications_group: testAppCode,
+                auth: testAuthToken,
+                notifications: [{
+                    send_date: 'now',
+                    ignore_user_timezone: true,
+                    content: testMsg,
+                    devices: []
+                }]
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken, {useApplicationsGroup: true});
+
+
+    client.sendMessage(testMsg, mockOptions, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, {}, 'response is the same');
+    });
+
+});
 
 test('Pushwoosh send message success case with 4 params: msg, device, options, callback', function (t) {
     t.plan(5);

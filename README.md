@@ -5,7 +5,7 @@ A node js client to consume the Pushwoosh API to send push notifications to mobi
 ## Installation
 
     npm i pushwoosh-client --save
-    
+
 ## Usage
 
 Send messages to all devices
@@ -63,12 +63,31 @@ client.sendMessage('Hello world', 'device token', options, function(error, respo
      ...
 });
 ```
-Then this will send to ['deviceToken1', 'deviceToken2', 'deviceToken3'] as defined in options.  so you probably just want to just do 
+Then this will send to ['deviceToken1', 'deviceToken2', 'deviceToken3'] as defined in options.  so you probably just want to just do
 ```javascript
 client.sendMessage('Hello world', options, function(error, response) {
     ...
 });
 ```
+To use Puswoosh `applications_group` code instead of `application` code, you must pass a third `options` argument when creating the client with `useApplicationsGroup` set to true:
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh("AppsGroupCode", "AuthToken", {
+    useApplicationsGroup: true,
+    ...
+});
+
+// Will push using "applications_group":"AppsGroupCode" for all of the explained invocation patterns
+client.sendMessage('Hello world', function(error, response) {
+     ...
+});
+// or
+client.sendMessage('Hello world', options, function(error, response) {
+    ...
+});
+// ... and so on
+```
+
 ## Tests
 
     npm test
