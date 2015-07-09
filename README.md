@@ -2,13 +2,15 @@
 
 A node js client to consume the Pushwoosh API to send push notifications to mobile devices
 
-## Installation
+## Quick Reference
+
+### Installation
 
     npm i pushwoosh-client --save
 
-## Usage
 
-Send messages to all devices
+### Send Message to all devices
+
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
 var client= new Pushwoosh("AppCode", "AuthToken");
@@ -22,6 +24,7 @@ client.sendMessage('Hello world', function(error, response) {
 });
 ```
 
+### To a specific device or devices
 To send messages to a specificed device or devices, you can pass a device token or an arrays with devices
 
 ```javascript
@@ -35,6 +38,7 @@ client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(err
 });
 ```
 
+### Extra options/payload
 To pass extra options (please refer to the Pushwoosh [doc](https://www.pushwoosh.com/programming-push-notification/pushwoosh-push-notification-remote-api/) for the available options) , you could define an option object and pass it to the function as a 2nd or 3rd parameter. E.g. if you want to pass addtional payload to the device, you could do:
 
 ```javascript
@@ -69,7 +73,9 @@ client.sendMessage('Hello world', options, function(error, response) {
     ...
 });
 ```
-To use Puswoosh `applications_group` code instead of `application` code, you must pass a third `options` argument when creating the client with `useApplicationsGroup` set to true:
+
+### Applications group
+To use Puswoosh `applications_group` code(which allows you to send to multilple applications) instead of `application` code, you must pass a third `options` argument when creating the client with `useApplicationsGroup` set to true:
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
 var client= new Pushwoosh("AppsGroupCode", "AuthToken", {
