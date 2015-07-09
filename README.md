@@ -4,12 +4,12 @@ A node js client to consume the Pushwoosh API to send push notifications to mobi
 
 ## Quick Reference
 
-### Installation
+#### Installation
 
     npm i pushwoosh-client --save
 
 
-### Send Message to all devices
+#### Send Message to all devices
 
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
@@ -38,7 +38,7 @@ client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(err
 });
 ```
 
-### Extra options/payload
+#### Extra options/payload
 To pass extra options (please refer to the Pushwoosh [doc](https://www.pushwoosh.com/programming-push-notification/pushwoosh-push-notification-remote-api/) for the available options) , you could define an option object and pass it to the function as a 2nd or 3rd parameter. E.g. if you want to pass addtional payload to the device, you could do:
 
 ```javascript
@@ -74,7 +74,7 @@ client.sendMessage('Hello world', options, function(error, response) {
 });
 ```
 
-### Applications group
+#### Applications group
 To use Puswoosh `applications_group` code(which allows you to send to multilple applications) instead of `application` code, you must pass a third `options` argument when creating the client with `useApplicationsGroup` set to true:
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
