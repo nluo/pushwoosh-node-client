@@ -6,7 +6,7 @@ var request = require('request'),
 
 function PushwooshClient(appCode, authToken, options) {
     if (!appCode || !authToken) {
-        throw new Error('Application ID and Authentication Token from Pushwoosh must be provided');
+        throw new Error('Application/ApplicationsGroup ID and Authentication Token from Pushwoosh must be provided');
     }
 
     this.appCode = appCode;
@@ -17,6 +17,7 @@ function PushwooshClient(appCode, authToken, options) {
 
     this.host = options.host || host;
     this.apiVersion = options.apiVersion || apiVersion;
+    this.useApplicationsGroup = options.useApplicationsGroup;
 
 };
 
@@ -66,11 +67,16 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     var body = {
         request: {
-            application: client.appCode,
             auth: client.authToken,
             notifications: [notification]
         }
     };
+
+    if (client.useApplicationsGroup) {
+        body.request.applications_group = client.appCode;
+    } else {
+        body.request.application = client.appCode;
+    }
 
     client.sendRequest('createMessage', body, function (error, response, body) {
         if (error) {
