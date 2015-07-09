@@ -1,6 +1,6 @@
 {
   "name": "pushwoosh-client",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A node js client to consume the Pushwoosh API to send push notifications to mobile devices",
   "main": "index.js",
   "scripts": {
