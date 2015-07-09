@@ -9,7 +9,7 @@ A node js client to consume the Pushwoosh API to send push notifications to mobi
     npm i pushwoosh-client --save
 
 
-#### Send Message to all devices
+#### Send message to all devices
 
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
@@ -24,7 +24,7 @@ client.sendMessage('Hello world', function(error, response) {
 });
 ```
 
-### To a specific device or devices
+#### To a specific device or devices
 To send messages to a specificed device or devices, you can pass a device token or an arrays with devices
 
 ```javascript
@@ -94,7 +94,7 @@ client.sendMessage('Hello world', options, function(error, response) {
 // ... and so on
 ```
 
-## Tests
+### Tests
 
     npm test
 
