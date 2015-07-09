@@ -1,4 +1,6 @@
-# pushwoosh-node-client [![Build Status](https://travis-ci.org/nluo/pushwoosh-node-client.svg?branch=master)](https://travis-ci.org/nluo/pushwoosh-node-client) [![Join the chat at https://gitter.im/nluo/pushwoosh-node-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nluo/pushwoosh-node-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# pushwoosh-node-client 
+
+[![Build Status](https://travis-ci.org/nluo/pushwoosh-node-client.svg?branch=master)](https://travis-ci.org/nluo/pushwoosh-node-client) [![Join the chat at https://gitter.im/nluo/pushwoosh-node-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nluo/pushwoosh-node-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A node js client to consume the Pushwoosh API to send push notifications to mobile devices
 
