@@ -96,6 +96,26 @@ client.sendMessage('Hello world', options, function(error, response) {
 // ... and so on
 ```
 
+#### Register device
+To register a device's push token in Pushwoosh:
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh('AppCode', 'AuthToken');
+
+var registerDeviceOptions = {
+    push_token: 'pushtoken',
+    hwid: 'hwid',
+    device_type: 3,
+    language: 'en', // optional, two-letter code ISO-639-1
+    timezone: -3600 // optional, offset in seconds
+};
+
+// this will register the device for the client's 'AppCode' application
+client.registerDevice(registerDeviceOptions, function(error, response) {
+     ...
+});
+```
+
 ### Tests
 
     npm test
