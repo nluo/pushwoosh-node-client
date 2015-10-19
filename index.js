@@ -19,7 +19,7 @@ function PushwooshClient(appCode, authToken, options) {
     this.apiVersion = options.apiVersion || apiVersion;
     this.useApplicationsGroup = options.useApplicationsGroup;
 
-};
+}
 
 PushwooshClient.prototype.sendMessage = function (msg, device, options, callback) {
 
@@ -59,9 +59,12 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
     var defaultOptions = {
         send_date: 'now',
         ignore_user_timezone: true,
-        content: msg,
-        devices: devices
+        content: msg
     };
+
+    if(device) {
+      defaultOptions.devices = devices;
+    }
 
     var notification = extend(defaultOptions, options);
 
@@ -106,7 +109,7 @@ PushwooshClient.prototype.deleteMessage = function (msgCode, callback) {
             return callback(error);
         }
         client.parseResponse(response, body, callback);
-    })
+    });
 };
 
 PushwooshClient.prototype.registerDevice = function (options, callback) {
