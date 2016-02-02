@@ -15,7 +15,7 @@ fraudster.registerAllowables([pathToObjectUnderTest, 'util']);
 
 function resetMocks() {
     fraudster.registerMock('request', {});
-    fraudster.registerMock('../lib/errors', errors);
+    fraudster.registerMock('./lib/errors', errors);
 }
 
 
@@ -120,7 +120,7 @@ test('Pushwoosh send message success case with only 2 params msg and callback', 
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg                    
+                    content: testMsg
                 }]
             }
         };

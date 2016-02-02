@@ -46,6 +46,12 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
         }
     }
 
+    var defaultOptions = {
+        send_date: 'now',
+        ignore_user_timezone: true,
+        content: msg
+    };
+
     var devices = [];
 
     if (device && typeof device === 'string') {
@@ -56,13 +62,7 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
         devices = device;
     }
 
-    var defaultOptions = {
-        send_date: 'now',
-        ignore_user_timezone: true,
-        content: msg
-    };
-
-    if(device) {
+    if (device) {
       defaultOptions.devices = devices;
     }
 
