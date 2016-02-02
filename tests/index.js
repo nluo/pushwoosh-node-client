@@ -120,8 +120,7 @@ test('Pushwoosh send message success case with only 2 params msg and callback', 
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg                    
                 }]
             }
         };
@@ -161,8 +160,7 @@ test('Pushwoosh send message success case for useApplicationsGroup:true with onl
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg
                 }]
             }
         };
@@ -247,8 +245,7 @@ test('Pushwoosh send message success case with 3 params: msg, options, callback'
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg
                 }]
             }
         };
@@ -290,8 +287,7 @@ test('Pushwoosh send message success case for useApplicationsGroup:true with 3 p
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg
                 }]
             }
         };
@@ -564,8 +560,7 @@ test('Pushwoosh send message success case with response code 500 test 2', functi
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg
                 }]
             }
         },
@@ -605,8 +600,7 @@ test('Pushwoosh send message success case with response code 400', function (t) 
                 notifications: [{
                     send_date: 'now',
                     ignore_user_timezone: true,
-                    content: testMsg,
-                    devices: []
+                    content: testMsg
                 }]
             }
         },
