@@ -1051,8 +1051,7 @@ test('Pushwoosh register token success case with response code 400', function (t
                 hwid: mockHwid,
                 device_type: mockDeviceType
             }
-        },
-        expectedResult = {description: 'Argument error', detail: mockBodyResponse.status_message, code: 210};
+        };
 
     fraudster.registerMock('request', function (params, callback) {
         t.ok(params, 'Params exists');
@@ -1070,7 +1069,7 @@ test('Pushwoosh register token success case with response code 400', function (t
     });
 });
 
-test('Pushwoosh register token success case with response code 400', function (t) {
+test('Pushwoosh register token success case with response code 500', function (t) {
     t.plan(5);
 
     var mockDevice = 'someToken',
@@ -1095,8 +1094,7 @@ test('Pushwoosh register token success case with response code 400', function (t
                 hwid: mockHwid,
                 device_type: mockDeviceType
             }
-        },
-        expectedResult = {description: 'Argument error', detail: mockBodyResponse.status_message, code: 210};
+        };
 
     fraudster.registerMock('request', function (params, callback) {
         t.ok(params, 'Params exists');
