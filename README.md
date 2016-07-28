@@ -116,6 +116,22 @@ client.registerDevice(registerDeviceOptions, function(error, response) {
 });
 ```
 
+#### Unregister device
+To unregister a device in Pushwoosh:
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh('AppCode', 'AuthToken');
+
+var unregisterDeviceOptions = {
+    hwid: 'hwid'
+};
+
+// this will unregister the device from the client's 'AppCode' application
+client.unregisterDevice(unregisterDeviceOptions, function(error, response) {
+     ...
+});
+```
+
 ### Tests
 
     npm test
