@@ -148,6 +148,28 @@ PushwooshClient.prototype.registerDevice = function (options, callback) {
     });
 };
 
+PushwooshClient.prototype.unregisterDevice = function (options, callback) {
+    var client = this;
+
+    if (typeof options.hwid !== 'string') {
+        return callback(new Error('Device hwid must be provided (string)'));
+    }
+
+    var body = {
+        request: {
+            application: client.appCode,
+            hwid: options.hwid
+        }
+    };
+
+    client.sendRequest('unregisterDevice', body, function(error, response, body){
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    });
+};
+
 PushwooshClient.prototype.sendRequest = function (method, data, callback) {
     request({
         method: 'POST',
