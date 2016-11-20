@@ -36,13 +36,11 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     if (!callback) {
         callback = options;
-        if (typeof device === 'object') {
+        if (Array.isArray(device) || typeof device === 'string') {
+            options = {};
+        } else if (typeof device === 'object') {
             options = device;
             device = null;
-        }
-
-        if (typeof device === 'string') {
-            options = {};
         }
     }
 
@@ -58,11 +56,11 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
         devices.push(device);
     }
 
-    if (device && device instanceof Array) {
+    if (Array.isArray(device)) {
         devices = device;
     }
 
-    if (device) {
+    if (devices.length > 0) {
       defaultOptions.devices = devices;
     }
 
