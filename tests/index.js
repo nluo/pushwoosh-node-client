@@ -183,7 +183,7 @@ test('Pushwoosh send message success case for useApplicationsGroup:true with onl
 
 });
 
-test('Pushwoosh send message success case with 3 params: msg, device, callback', function (t) {
+test('Pushwoosh send message success case with 3 params: msg, device(as string), callback', function (t) {
     t.plan(5);
 
     var mockDevice = 'someToken',
@@ -223,6 +223,90 @@ test('Pushwoosh send message success case with 3 params: msg, device, callback',
         t.deepEqual(response, {}, 'response is the same');
     });
 
+});
+
+test('Pushwoosh send message success case with one device (as array) but without options (3 params)', function (t) {
+    t.plan(5);
+
+    var mockDevice = ['device1'],
+        mockOptions = {},
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {}
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                auth: testAuthToken,
+                notifications: [{
+                    send_date: 'now',
+                    ignore_user_timezone: true,
+                    content: testMsg,
+                    devices: mockDevice
+                }]
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+
+    client.sendMessage(testMsg, ['device1'], function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, {}, 'response is the same');
+    });
+});
+
+test('Pushwoosh send message success case with multiple devices (in array) but without options (3 params)', function (t) {
+    t.plan(5);
+
+    var mockDevice = ['device1', 'device2'],
+        mockOptions = {},
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {}
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                auth: testAuthToken,
+                notifications: [{
+                    send_date: 'now',
+                    ignore_user_timezone: true,
+                    content: testMsg,
+                    devices: mockDevice
+                }]
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+
+    client.sendMessage(testMsg, mockDevice, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, {}, 'response is the same');
+    });
 });
 
 
@@ -353,8 +437,7 @@ test('Pushwoosh send message success case with 4 params: msg, device, options, c
 
 });
 
-
-test('Pushwoosh send message success case with multiple devices', function (t) {
+test('Pushwoosh send message success case with multiple devices with all the 4 params(msg, device, options, callback)', function (t) {
     t.plan(5);
 
     var mockDevice = ['device1', 'device2'],
@@ -411,7 +494,6 @@ test('Pushwoosh send message error case with no msg passed', function (t) {
         t.deepEqual(err, new Error('Message has to be provided'), 'Error as expected');
         t.notOk(response, 'No response as expected');
     });
-
 });
 
 

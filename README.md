@@ -1,4 +1,4 @@
-# pushwoosh-node-client 
+# pushwoosh-node-client
 
 [![Build Status](https://travis-ci.org/nluo/pushwoosh-node-client.svg?branch=master)](https://travis-ci.org/nluo/pushwoosh-node-client) [![Join the chat at https://gitter.im/nluo/pushwoosh-node-client](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nluo/pushwoosh-node-client?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -41,7 +41,7 @@ client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(err
 ```
 
 #### Extra options/payload
-To pass extra options (please refer to the Pushwoosh [doc](https://www.pushwoosh.com/programming-push-notification/pushwoosh-push-notification-remote-api/) for the available options) , you could define an option object and pass it to the function as a 2nd or 3rd parameter. E.g. if you want to pass addtional payload to the device, you could do:
+To pass extra options (please refer to the Pushwoosh [doc](http://docs.pushwoosh.com/docs/createmessage) for the available options) , you could define an option object and pass it to the function as a 2nd or 3rd parameter. E.g. if you want to pass addtional payload to the device, you could do:
 
 ```javascript
 var Pushwoosh = require('pushwoosh-client'),
