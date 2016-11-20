@@ -353,7 +353,7 @@ test('Pushwoosh send message success case with 4 params: msg, device, options, c
 
 });
 
-test('Pushwoosh send message success case with multiple devices without options, but with 3 params', function (t) {
+test('Pushwoosh send message success case with multiple devices but without options (3 params)', function (t) {
     t.plan(5);
 
     var mockDevice = ['device1', 'device2'],
