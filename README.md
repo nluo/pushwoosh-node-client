@@ -132,6 +132,42 @@ client.unregisterDevice(unregisterDeviceOptions, function(error, response) {
 });
 ```
 
+### Set tags for device
+To set tags for a device in Pushwoosh:
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh('AppCode', 'AuthToken');
+ 
+var setTagsOptions = {
+    hwid: 'hwid',
+    tags: {
+        price: "1.99",
+        language: "pl"
+    }
+};
+ 
+// this will set the device tags for the client's 'AppCode' application
+client.setTags(setTagsOptions , function(error, response) {
+    ...
+});
+```
+ 
+### Get tags for device
+To get tags for a device from Pushwoosh:
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh('AppCode', 'AuthToken');
+
+var getTagsOptions = {
+    hwid: 'hwid'
+};
+
+// this will get the device tags for the client's 'AppCode' application
+client.getTags(getTagsOptions , function(error, response) {
+    ...
+});
+```
+
 ### Tests
 
     npm test
