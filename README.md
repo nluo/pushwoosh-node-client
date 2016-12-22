@@ -132,7 +132,7 @@ client.unregisterDevice(unregisterDeviceOptions, function(error, response) {
 });
 ```
 
-### Set tags for device
+#### Set tags for device
 To set tags for a device in Pushwoosh:
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
@@ -152,7 +152,7 @@ client.setTags(setTagsOptions , function(error, response) {
 });
 ```
  
-### Get tags for device
+#### Get tags for device
 To get tags for a device from Pushwoosh:
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
