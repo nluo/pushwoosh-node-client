@@ -1359,3 +1359,415 @@ test('Pushwoosh unregister token error case with response code 500', function (t
         t.deepEqual(err, new errors.Internal(), 'Got Internal Error!');
     });
 });
+
+test('Pushwoosh get tags success case', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid
+        },
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {
+            result: {
+                  language: "fr"
+                }
+            }
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid
+            }
+        },
+        expectedResponse = {
+            result: {
+                language: "fr"
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.getTags(mockOptions, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, expectedResponse, 'response is the same');
+    });
+});
+
+test('Pushwoosh get tags error case with no hwid', function (t) {
+    t.plan(2);
+
+    var mockOptions = {};
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.getTags(mockOptions, function (err, response) {
+        t.deepEqual(err, new Error('Device hwid must be provided'), 'Error as expected');
+        t.notOk(response, 'No response as expected');
+    });
+});
+
+test('Pushwoosh get tags success case with response code 200 but status code 210', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid
+        },
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 210,
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid
+            }
+        },
+        expectedResult = {description: 'Argument error', detail: mockBodyResponse.status_message, code: 210};
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.getTags(mockOptions, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, expectedResult, 'response is the same');
+    });
+});
+
+test('Pushwoosh get tags error case with response code 400', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid
+        },
+        mockResponse = {
+            statusCode: 400
+        },
+        mockBodyResponse = {
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.getTags(mockOptions, function (err, response) {
+        t.notOk(response, 'No error as expected');
+        t.deepEqual(err, new errors.Malformed(), 'Got Malformed Error!');
+    });
+});
+
+test('Pushwoosh get tags error case with response code 500', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid
+        },
+        mockResponse = {
+            statusCode: 500
+        },
+        mockBodyResponse = {
+            status_code: 500,
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.getTags(mockOptions, function (err, response) {
+        t.notOk(response, 'No error as expected');
+        t.deepEqual(err, new errors.Internal(), 'Got Internal Error!');
+    });
+});
+
+test('Pushwoosh set tags success case with many tags', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid,
+            tags: {
+                stringTag: "string value",
+                integerTag: 42,
+                listTag: ["string1","string2"],
+                dateTag: "2015-10-02 22:11",
+                booleanTag: true
+            }
+        },
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 200,
+            response: {}
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid,
+                tags: {
+                    stringTag: "string value",
+                    integerTag: 42,
+                    listTag: ["string1","string2"],
+                    dateTag: "2015-10-02 22:11",
+                    booleanTag: true
+                }
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, {}, 'response is the same');
+    });
+});
+
+test('Pushwoosh set tags error case with no hwid', function (t) {
+    t.plan(2);
+
+    var mockOptions = {};
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.deepEqual(err, new Error('Device hwid must be provided'), 'Error as expected');
+        t.notOk(response, 'No response as expected');
+    });
+});
+
+test('Pushwoosh set tags error case with no tags', function (t) {
+    t.plan(2);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid
+        };
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.deepEqual(err, new Error('Tags must be provided'), 'Error as expected');
+        t.notOk(response, 'No response as expected');
+    });
+});
+
+test('Pushwoosh set tags success case with response code 200 but status code 210', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid,
+            tags: {
+                stringTag: "string value",
+                integerTag: 42,
+                listTag: ["string1","string2"],
+                dateTag: "2015-10-02 22:11",
+                booleanTag: true
+            }
+        },
+        mockResponse = {
+            statusCode: 200
+        },
+        mockBodyResponse = {
+            status_code: 210,
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid,
+                tags: {
+                    stringTag: "string value",
+                    integerTag: 42,
+                    listTag: ["string1","string2"],
+                    dateTag: "2015-10-02 22:11",
+                    booleanTag: true
+                }
+            }
+        },
+        expectedResult = {description: 'Argument error', detail: mockBodyResponse.status_message, code: 210};
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.notOk(err, 'No error as expected');
+        t.deepEqual(response, expectedResult, 'response is the same');
+    });
+});
+
+test('Pushwoosh set tags error case with response code 400', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid,
+            tags: {
+                stringTag: "string value",
+                integerTag: 42,
+                listTag: ["string1","string2"],
+                dateTag: "2015-10-02 22:11",
+                booleanTag: true
+            }
+        },
+        mockResponse = {
+            statusCode: 400
+        },
+        mockBodyResponse = {
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid,
+                tags: {
+                    stringTag: "string value",
+                    integerTag: 42,
+                    listTag: ["string1","string2"],
+                    dateTag: "2015-10-02 22:11",
+                    booleanTag: true
+                }
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.notOk(response, 'No error as expected');
+        t.deepEqual(err, new errors.Malformed(), 'Got Malformed Error!');
+    });
+});
+
+test('Pushwoosh set tags error case with response code 500', function (t) {
+    t.plan(5);
+
+    var mockHwid = 'someHwid',
+        mockOptions = {
+            hwid: mockHwid,
+            tags: {
+                stringTag: "string value",
+                integerTag: 42,
+                listTag: ["string1","string2"],
+                dateTag: "2015-10-02 22:11",
+                booleanTag: true
+            }
+        },
+        mockResponse = {
+            statusCode: 500
+        },
+        mockBodyResponse = {
+            status_code: 500,
+            response: {},
+            status_message: testError
+        },
+        expectedBody = {
+            request: {
+                application: testAppCode,
+                hwid: mockHwid,
+                tags: {
+                    stringTag: "string value",
+                    integerTag: 42,
+                    listTag: ["string1","string2"],
+                    dateTag: "2015-10-02 22:11",
+                    booleanTag: true
+                }
+            }
+        };
+
+    fraudster.registerMock('request', function (params, callback) {
+        t.ok(params, 'Params exists');
+        t.deepEqual(params.body, expectedBody, 'Body are as expected');
+        t.equal(params.method, 'POST', 'Method is POST as expected');
+        callback(null, mockResponse, mockBodyResponse);
+    });
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(testAppCode, testAuthToken);
+
+    client.setTags(mockOptions, function (err, response) {
+        t.notOk(response, 'No error as expected');
+        t.deepEqual(err, new errors.Internal(), 'Got Internal Error!');
+    });
+});
