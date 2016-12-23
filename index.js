@@ -168,6 +168,55 @@ PushwooshClient.prototype.unregisterDevice = function (options, callback) {
     });
 };
 
+PushwooshClient.prototype.setTags = function(options, callback) {
+    var client = this;
+
+    if (typeof options.hwid !== 'string') {
+        return callback(new Error('Device hwid must be provided (string)'));
+    }
+
+    if (typeof options.tags !== 'object') {
+        return callback(new Error('Tags must be provided (object)'));
+    }
+
+    var body = {
+        request: {
+            application: client.appCode,
+            hwid: options.hwid,
+            tags: options.tags
+        }
+    };
+
+    client.sendRequest('setTags', body, function(error, response, body){
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    });
+};
+
+PushwooshClient.prototype.getTags = function(options, callback) {
+    var client = this;
+
+    if (typeof options.hwid !== 'string') {
+        return callback(new Error('Device hwid must be provided (string)'));
+    }
+
+    var body = {
+        request: {
+            application: client.appCode,
+            hwid: options.hwid
+        }
+    };
+
+    client.sendRequest('getTags', body, function(error, response, body){
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    });
+};
+
 PushwooshClient.prototype.sendRequest = function (method, data, callback) {
     request({
         method: 'POST',
