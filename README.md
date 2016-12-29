@@ -168,6 +168,20 @@ client.getTags(getTagsOptions , function(error, response) {
 });
 ```
 
+#### Send Targeted Message
+To view the syntax for device_filter and to pass extra options (please refer to the Pushwoosh [doc](http://docs.pushwoosh.com/docs/createtargetedmessage) for the available options).
+
+```javascript
+var Pushwoosh = require('pushwoosh-client'),
+    client= new Pushwoosh("AuthToken"),
+    options = {
+        device_filter: 'A("00000-00000") * T("gender", EQ, "F")'
+    };
+    client.sendMessage('Hello world', options, function(error, response) {
+     ...
+    });
+```
+
 ### Tests
 
     npm test
