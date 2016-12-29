@@ -274,7 +274,6 @@ PushwooshClient.prototype.sendTargetedMessage = function (msg, options, callback
         content: msg
     };
 
-
     var notification = extend(defaultOptions, options);
 
     var body = {
@@ -283,7 +282,7 @@ PushwooshClient.prototype.sendTargetedMessage = function (msg, options, callback
         }
     };
 
-    var body.request = extend(body.request, notification);
+    body.request = extend(body.request, notification);
 
 
     client.sendRequest('createTargetedMessage', body, function (error, response, body) {
