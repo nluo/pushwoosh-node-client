@@ -5,12 +5,25 @@ var request = require('request'),
     apiVersion = '1.3';
 
 function PushwooshClient(appCode, authToken, options) {
-    if (!appCode || !authToken) {
-        throw new Error('Application/ApplicationsGroup ID and Authentication Token from Pushwoosh must be provided');
+    if(!options){ // Only authToken And options are sent in case of Targeted Message
+      console.log("options missing");
+      console.log("authToken: ",authToken);
+      this.options = authToken;
+      this.authToken = appCode;
+      appCode = null;
     }
-
-    this.appCode = appCode;
-    this.authToken = authToken;
+    else{
+      this.appCode = appCode;
+      this.authToken = authToken;
+    }
+    if (!appCode || !authToken) {
+      if(!this.options || !this.options.hasOwnProperty('isTargetedMessage')) {
+        throw new Error('Application/ApplicationsGroup ID and Authentication Token from Pushwoosh must be provided');
+      }
+      else if(!authToken){
+        throw new Error('Authentication Token from Pushwoosh must be provided');
+      }
+    }
 
     // parse the options
     options = options || {};
@@ -265,9 +278,6 @@ PushwooshClient.prototype.sendTargetedMessage = function (msg, options, callback
     if (!options || !options.hasOwnProperty('devices_filter') || typeof options.devices_filter !== 'string') {
         return callback(new Error('Devices Filter has to be provided'));
     }
-    else{
-        options.devices_filter = JSON.stringify(options.devices_filter);
-    }
 
     var defaultOptions = {
         send_date: 'now',
@@ -278,12 +288,11 @@ PushwooshClient.prototype.sendTargetedMessage = function (msg, options, callback
 
     var body = {
         request: {
-            auth: client.appCode, // first parameter is appCode where we recieve the authToken in this case
+            auth: client.authToken,
         }
     };
 
     body.request = extend(body.request, notification);
-
 
     client.sendRequest('createTargetedMessage', body, function (error, response, body) {
         if (error) {

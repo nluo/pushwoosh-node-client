@@ -173,7 +173,9 @@ To view the syntax for device_filter and to pass extra options (please refer to 
 
 ```javascript
 var Pushwoosh = require('pushwoosh-client'),
-    client= new Pushwoosh("AuthToken"),
+    client= new Pushwoosh("AuthToken", {
+        isTargetedMessage: true
+    }),
     options = {
         device_filter: 'A("00000-00000") * T("gender", EQ, "F")'
     };
