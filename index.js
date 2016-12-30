@@ -5,24 +5,25 @@ var request = require('request'),
     apiVersion = '1.3';
 
 function PushwooshClient(appCode, authToken, options) {
-    if(!options){ // Only authToken And options are sent in case of Targeted Message
-      console.log("options missing");
-      console.log("authToken: ",authToken);
-      this.options = authToken;
-      this.authToken = appCode;
-      appCode = null;
-    }
-    else{
-      this.appCode = appCode;
-      this.authToken = authToken;
+    var isTargetedMessage = false;
+    if(!options && authToken && authToken.hasOwnProperty('isTargetedMessage')){
+        isTargetedMessage = true;
+        if(!appCode) {
+            throw new Error('Authentication Token from Pushwoosh must be provided');
+        }
     }
     if (!appCode || !authToken) {
-      if(!this.options || !this.options.hasOwnProperty('isTargetedMessage')) {
         throw new Error('Application/ApplicationsGroup ID and Authentication Token from Pushwoosh must be provided');
-      }
-      else if(!authToken){
-        throw new Error('Authentication Token from Pushwoosh must be provided');
-      }
+    }
+
+    if(!isTargetedMessage) {
+        this.appCode = appCode;
+        this.authToken = authToken;
+    }
+    else{
+        this.options = authToken;
+        this.authToken = appCode;
+        this.appCode = null;
     }
 
     // parse the options
