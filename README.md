@@ -40,10 +40,10 @@ client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(err
 });
 ```
 
-### Configure option if we don't want to send to all devices by default
-By default, if we don't provide the device params, it will send push notifications to all devices. Sometimes this might not be what we want. 
+#### Configure option if we don't want to send to all devices by default
+By default, if we don't provide the device params, it will send push notifications to all devices. Sometimes this might not be what we want.
 
-If we initialise Pushwoosh Client with `shouldSendToAllDevices` to `false`, then it will not send push notifications and return a callback error if we don't provide any device/devices
+If we initialise Pushwoosh Client with `shouldSendToAllDevices` to `false`, then it will NOT send push notifications and return a callback error if we did not provide any device/devices.
 
 ```javascript
 var Pushwoosh = require('pushwoosh-client');
