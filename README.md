@@ -40,6 +40,24 @@ client.sendMessage('Hello world', ['deviceToken1', 'deivceToken2'], function(err
 });
 ```
 
+#### Configure option if we don't want to send to all devices by default
+By default, if we don't provide the device params, it will send push notifications to all devices. Sometimes this might not be what we want.
+
+If we initialise Pushwoosh Client with `shouldSendToAllDevices` to `false`, then it will NOT send push notifications and return a callback error if we did not provide any device/devices.
+
+```javascript
+var Pushwoosh = require('pushwoosh-client');
+var client= new Pushwoosh("AppsGroupCode", "AuthToken", {
+    shouldSendToAllDevices: false
+});
+
+client.sendMessage('Hello world', function(error, response) {
+     // We will get error here as we don't have any device/devices provided
+});
+```
+
+Note: `shouldSendToAllDevices` is set to `true` if we don't configure it in option 
+
 #### Extra options/payload
 To pass extra options (please refer to the Pushwoosh [doc](http://docs.pushwoosh.com/docs/createmessage) for the available options) , you could define an option object and pass it to the function as a 2nd or 3rd parameter. E.g. if you want to pass addtional payload to the device, you could do:
 

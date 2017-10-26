@@ -38,7 +38,7 @@ test('Pushwoosh client exists', function (t) {
 });
 
 test('Pushwoosh constructor success case', function (t) {
-    t.plan(4);
+    t.plan(5);
 
     var PwClient = getCleanTestObject(),
         client = new PwClient(testAppCode, testAuthToken, {host: testHost, apiVersion: testApiVersion});
@@ -47,6 +47,11 @@ test('Pushwoosh constructor success case', function (t) {
     t.equal(client.authToken, testAuthToken, 'Auth token passed correctly');
     t.equal(client.apiVersion, testApiVersion, 'API version correct');
     t.equal(client.host, testHost, 'API host correct');
+    t.equal(
+        client.shouldSendToAllDevices, 
+        true, 
+        'Pushwoosh Client default to send to all devices if shouldSendToAllDevices not set'
+    );    
 
 });
 
@@ -1770,4 +1775,49 @@ test('Pushwoosh set tags error case with response code 500', function (t) {
         t.notOk(response, 'No error as expected');
         t.deepEqual(err, new errors.Internal(), 'Got Internal Error!');
     });
+});
+
+test('Pushwoosh client configured to not send to all devices', function (t) {
+    t.plan(4);
+
+    var PwClient = getCleanTestObject(),
+        client = new PwClient(
+            testAppCode, 
+            testAuthToken, 
+            {
+                useApplicationsGroup: true,
+                shouldSendToAllDevices: false
+            }
+        );
+
+    t.equal(client.shouldSendToAllDevices, false, 'Pushwoosh Client configured not to send to all devices');
+
+    var mockResponse = {
+        statusCode: 200
+    },
+    mockBodyResponse = {
+        status_code: 200,
+        response: {}
+    },
+    expectedBody = {
+        request: {
+            application: testAppCode,
+            auth: testAuthToken,
+            notifications: [{
+                send_date: 'now',
+                ignore_user_timezone: true,
+                content: testMsg
+            }]
+        }
+    };
+
+    client.sendMessage(testMsg, function(error, response) {
+        t.notOk(response, 'No response as expected');
+        t.equal(error instanceof Error, true, 'Error object exists');
+        t.equal(
+            error.message,
+            'You have configured not send to all devices, but you have not provided any devices to send!',
+            'No devices provided error expected!'
+        );
+      });
 });

@@ -19,6 +19,11 @@ function PushwooshClient(appCode, authToken, options) {
     this.apiVersion = options.apiVersion || apiVersion;
     this.useApplicationsGroup = options.useApplicationsGroup;
 
+    // Default shouldSendToAllDevices to true if not provided
+    this.shouldSendToAllDevices =
+        typeof options.shouldSendToAllDevices === 'undefined'
+        ? true
+        : options.shouldSendToAllDevices;
 }
 
 PushwooshClient.prototype.sendMessage = function (msg, device, options, callback) {
@@ -58,6 +63,10 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
 
     if (Array.isArray(device)) {
         devices = device;
+    }
+
+    if (this.shouldSendToAllDevices === false && devices.length === 0) {
+        return callback(new Error('You have configured not send to all devices, but you have not provided any devices to send!'))
     }
 
     if (devices.length > 0) {
