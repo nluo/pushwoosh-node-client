@@ -5,12 +5,26 @@ var request = require('request'),
     apiVersion = '1.3';
 
 function PushwooshClient(appCode, authToken, options) {
+    var isTargetedMessage = false;
+    if(!options && authToken && authToken.hasOwnProperty('isTargetedMessage')){
+        isTargetedMessage = true;
+        if(!appCode) {
+            throw new Error('Authentication Token from Pushwoosh must be provided');
+        }
+    }
     if (!appCode || !authToken) {
         throw new Error('Application/ApplicationsGroup ID and Authentication Token from Pushwoosh must be provided');
     }
 
-    this.appCode = appCode;
-    this.authToken = authToken;
+    if(!isTargetedMessage) {
+        this.appCode = appCode;
+        this.authToken = authToken;
+    }
+    else{
+        this.options = authToken;
+        this.authToken = appCode;
+        this.appCode = null;
+    }
 
     // parse the options
     options = options || {};
@@ -253,6 +267,49 @@ PushwooshClient.prototype.parseResponse = function(response, body, callback) {
     }
 
     callback(new Error('Unknown response code / error'));
+};
+
+PushwooshClient.prototype.sendTargetedMessage = function (msg, options, callback) {
+
+    var client = this;
+    if (!msg || typeof msg !== 'string') {
+        return callback(new Error('Message has to be provided'));
+    }
+
+    if(options){
+        if(options.hasOwnProperty('application')) return callback(new Error('application cannot be used in a Targeted Message'));
+        else if(options.hasOwnProperty('applications_group')) return callback(new Error('applications_group cannot be used in a Targeted Message'));
+        else if(options.hasOwnProperty('platforms')) return callback(new Error('platforms cannot be used in a Targeted Message'));
+        else if(options.hasOwnProperty('devices')) return callback(new Error('devices cannot be used in a Targeted Message'));
+        else if(options.hasOwnProperty('filter')) return callback(new Error('filter cannot be used in a Targeted Message'));
+        else if(options.hasOwnProperty('conditions')) return callback(new Error('conditions cannot be used in a Targeted Message'));
+    }
+
+    if (!options || !options.hasOwnProperty('devices_filter') || typeof options.devices_filter !== 'string') {
+        return callback(new Error('Devices Filter has to be provided'));
+    }
+
+    var defaultOptions = {
+        send_date: 'now',
+        content: msg
+    };
+
+    var notification = extend(defaultOptions, options);
+
+    var body = {
+        request: {
+            auth: client.authToken,
+        }
+    };
+
+    body.request = extend(body.request, notification);
+
+    client.sendRequest('createTargetedMessage', body, function (error, response, body) {
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    });
 };
 
 module.exports = PushwooshClient;
