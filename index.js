@@ -196,6 +196,10 @@ PushwooshClient.prototype.setTags = function(options, callback) {
         }
     };
 
+    if (options.userId) {
+        body.request.userId = options.userId;
+    }
+
     client.sendRequest('setTags', body, function(error, response, body){
         if (error) {
             return callback(error);
