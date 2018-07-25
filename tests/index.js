@@ -1590,6 +1590,52 @@ test('Pushwoosh set tags success case with many tags', function (t) {
     });
 });
 
+test('Pushwoosh set tags success case with userId', function (t) {
+	t.plan(5);
+
+	var mockHwid = 'someHwid',
+        mockUserId = 'someUserId',
+		mockOptions = {
+			hwid: mockHwid,
+			tags: {
+				stringTag: "string value"
+			},
+            userId: mockUserId
+		},
+		mockResponse = {
+			statusCode: 200
+		},
+		mockBodyResponse = {
+			status_code: 200,
+			response: {}
+		},
+		expectedBody = {
+			request: {
+				application: testAppCode,
+				hwid: mockHwid,
+				tags: {
+					stringTag: "string value"
+				},
+                userId: mockUserId
+			}
+		};
+
+	fraudster.registerMock('request', function (params, callback) {
+		t.ok(params, 'Params exists');
+		t.deepEqual(params.body, expectedBody, 'Body are as expected');
+		t.equal(params.method, 'POST', 'Method is POST as expected');
+		callback(null, mockResponse, mockBodyResponse);
+	});
+
+	var PwClient = getCleanTestObject(),
+		client = new PwClient(testAppCode, testAuthToken);
+
+	client.setTags(mockOptions, function (err, response) {
+		t.notOk(err, 'No error as expected');
+		t.deepEqual(response, {}, 'response is the same');
+	});
+});
+
 test('Pushwoosh set tags error case with no hwid', function (t) {
     t.plan(2);
 

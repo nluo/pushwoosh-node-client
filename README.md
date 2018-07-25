@@ -161,7 +161,8 @@ var setTagsOptions = {
     tags: {
         price: "1.99",
         language: "pl"
-    }
+    },
+    userId: 'user123' // required for user-specific tags
 };
  
 // this will set the device tags for the client's 'AppCode' application
@@ -169,6 +170,8 @@ client.setTags(setTagsOptions , function(error, response) {
     ...
 });
 ```
+
+Note: `userId` is a required field when a user-specific tag(s) is being set.
  
 #### Get tags for device
 To get tags for a device from Pushwoosh:
